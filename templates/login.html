@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HearMe | Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Consistent Warm Styling */
+    :root {
+      --coral: #FF7E6B;
+      --peach: #FFB8A2;
+      --cream: #FFF4E9;
+      --sage: #8BA888;
+      --clay: #D17B60;
+      --text: #5A3E36;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      color: var(--text);
+      background: 
+        linear-gradient(rgba(255, 244, 233, 0.85), rgba(255, 244, 233, 0.9)),
+        url('https://images.unsplash.com/photo-1497250681960-ef046c08a56e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80') no-repeat center/cover;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .login-container {
+      background: rgba(255, 255, 255, 0.85);
+      width: 90%;
+      max-width: 450px;
+      padding: 80px;
+      border-radius: 20px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 184, 162, 0.3);
+      backdrop-filter: blur(5px);
+      text-align: center;
+    }
+
+    .logo {
+      color: var(--clay);
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .tagline {
+      color: var(--text);
+      margin-bottom: 2rem;
+      font-weight: 600;
+    }
+
+    .input-group {
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--clay);
+      font-weight: 600;
+    }
+
+    input {
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid var(--peach);
+      border-radius: 12px;
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.7);
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--coral);
+      box-shadow: 0 0 0 3px rgba(255, 126, 107, 0.2);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 1.2rem;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 0.5rem;
+    }
+
+    .btn-login {
+      background: var(--coral);
+      color: white;
+      border: none;
+      box-shadow: 0 4px 12px rgba(255, 126, 107, 0.3);
+    }
+
+    .btn-login:hover {
+      background: #FF6B54;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(255, 126, 107, 0.4);
+    }
+
+    .divider {
+      margin: 1.8rem 0;
+      position: relative;
+      color: var(--text);
+    }
+
+    .divider::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--peach), transparent);
+      z-index: -1;
+    }
+
+    .divider span {
+      background: white;
+      padding: 0 1rem;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--clay);
+      border: 2px solid var(--peach);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 184, 162, 0.1);
+      border-color: var(--coral);
+    }
+
+    .footer-links {
+      margin-top: 2rem;
+      font-size: 0.9rem;
+    }
+
+    .footer-links a {
+      color: var(--clay);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    /* Animations */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .heart-float {
+      display: inline-block;
+      animation: float 3s ease-in-out infinite;
+      margin: 0 0.3rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="logo">HearMe</div>
+    <p class="tagline">Welcome back <span class="heart-float">❤️</span> We missed you</p>
+    {% if messages %}
+      <ul>
+        {% for message in messages %}
+        <li style="margin:5px;">
+          <div style="border-radius: 20px;, box-shadow: 3px 3px 6px black; background-color:white; color: orange; font-weight:500;">
+            {{ message }}
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    <form id="loginForm" method="POST">{% csrf_token %}
+      <div class="input-group">
+        <label for="username">Username</label>
+        {{form.username}}
+      </div>
+
+      <div class="input-group">
+        <label for="password">Create Password</label>
+        {{form.password}}
+      </div>
+
+      <button type="submit" class="btn btn-login">Log In</button>
+    </form>
+    
+    <div class="divider"><span>or</span></div>
+    
+    <button class="btn btn-secondary" id="guestBtn">Continue as Guest</button>
+    
+    <div class="footer-links">
+      <a href="#" id="forgotLink">Forgot password?</a> • 
+      <a href="{% url 'signup' %}" id="signupLink">Create account</a>
+    </div>
+  </div>
+
+</body>
+</html>

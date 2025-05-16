@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HearMe | Welcome</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* CSS Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Warm, Vibrant Color Palette */
+    :root {
+      --coral: #FF7E6B;
+      --peach: #FFB8A2;
+      --cream: #FFF4E9;
+      --sage: #8BA888;
+      --clay: #D17B60;
+      --text: #5A3E36;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+      background: 
+        linear-gradient(rgba(255, 244, 233, 0.85), rgba(255, 244, 233, 0.9)),
+        url('https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80') no-repeat center/cover;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 2rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      backdrop-filter: blur(2px);
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      color: var(--clay);
+      font-size: 2.8rem;
+      margin-bottom: 0.5rem;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .hero {
+      text-align: center;
+      margin: 2rem 0;
+      padding: 2rem;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(255, 184, 162, 0.3);
+    }
+
+    .emoji {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.85);
+      padding: 1.8rem 1.2rem;
+      border-radius: 16px;
+      width: 150px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+      text-align: center;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 184, 162, 0.2);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+      background: white;
+    }
+
+    .feature-card h3 {
+      color: var(--clay);
+      margin: 0.8rem 0;
+    }
+
+    .cta-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      margin: 2.5rem 0;
+    }
+
+    .btn {
+      padding: 1.2rem;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      border: none;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-primary {
+      background: var(--coral);
+      color: white;
+      box-shadow: 0 4px 12px rgba(255, 126, 107, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: #FF6B54;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(255, 126, 107, 0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.7);
+      color: var(--clay);
+      border: 2px solid var(--peach);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .btn-secondary:hover {
+      background: white;
+      border-color: var(--coral);
+      color: var(--coral);
+    }
+
+    .disclaimer {
+      text-align: center;
+      color: var(--text);
+      margin-top: auto;
+      padding-top: 2rem;
+      font-size: 0.85rem;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 1rem;
+      border-radius: 12px;
+    }
+
+    .disclaimer a {
+      color: var(--clay);
+      text-decoration: underline;
+      font-weight: 600;
+    }
+
+    /* Animations */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .floating {
+      animation: float 3.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .pulse:hover {
+      animation: pulse 1.5s infinite;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>HearMe</h1>
+      <p class="subtitle">Where kindness listens and hearts connect</p>
+    </header>
+
+    <div class="hero">
+      <span class="emoji floating"><img src="{%static 'logo.png'%}" alt="logo" height="250px"></span>
+      <p style="font-size: 1.3rem; color: var(--text);">Share what's in your heart. Find support from people who care.</p>
+    </div>
+
+    <div class="features">
+      <div class="feature-card pulse">
+        <span class="emoji">🤗</span>
+        <h3>Warm Hugs</h3>
+        <p>Virtual comfort when you need it most</p>
+      </div>
+      <div class="feature-card pulse">
+        <span class="emoji">🌈</span>
+        <h3>Safe Space</h3>
+        <p>Judgment-free zone</p>
+      </div>
+      <div class="feature-card pulse">
+        <span class="emoji">🌱</span>
+        <h3>Grow Together</h3>
+        <p>Shared healing journeys</p>
+      </div>
+    </div>
+
+    <div class="cta-buttons">
+      <a id="joinBtn" class="btn btn-primary" href="{% url 'home'%}">Find Support Now</a>
+      <a id="guidelinesBtn" class="btn btn-secondary" href="{% url 'how'%}">How It Works</a>
+    </div>
+
+    <footer class="disclaimer">
+      <small>
+        From one human to another ❤️<br>
+        If you're in crisis, please <a href="#" id="crisisLink">reach out here</a>.
+      </small>
+    </footer>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Interactive elements
+      const joinBtn = document.getElementById('joinBtn');
+      const guidelinesBtn = document.getElementById('guidelinesBtn');
+      const crisisLink = document.getElementById('crisisLink');
+      const featureCards = document.querySelectorAll('.feature-card');
+
+      // Click handlers
+      joinBtn.addEventListener('click', function() {
+        this.textContent = "Opening safe space...";
+        setTimeout(() => {
+          // window.location.href = "/signup";
+          alert("Redirect to signup in real implementation");
+          this.textContent = "Find Support Now";
+        }, 800);
+      });
+
+      guidelinesBtn.addEventListener('click', function() {
+        this.style.backgroundColor = "var(--peach)";
+        setTimeout(() => {
+          // window.location.href = "/guidelines";
+          alert("Community guidelines would appear here");
+          this.style.backgroundColor = "";
+        }, 300);
+      });
+
+      crisisLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        const resources = [
+          "Crisis Text Line: Text HOME to 741741",
+          "National Suicide Prevention Lifeline: 988",
+          "International Association for Suicide Prevention"
+        ];
+        alert("Important Resources:\n\n" + resources.join("\n\n"));
+      });
+
+      // Add interactive effects to feature cards
+      featureCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+          const emoji = this.querySelector('.emoji');
+          emoji.style.transform = 'rotate(10deg) scale(1.2)';
+        });
+
+        card.addEventListener('mouseleave', function() {
+          const emoji = this.querySelector('.emoji');
+          emoji.style.transform = 'rotate(0) scale(1)';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

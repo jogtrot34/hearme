@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HearMe | Chat</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --coral: #FF7E6B;
+      --peach: #FFB8A2;
+      --cream: #FFF4E9;
+      --sage: #8BA888;
+      --clay: #D17B60;
+      --text: #5A3E36;
+      --light-bg: rgba(255, 255, 255, 0.9);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.6;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Header */
+    .header {
+      background: var(--light-bg);
+      padding: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--clay);
+    }
+
+    .nav-icons {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-icons a {
+      color: var(--text);
+      font-size: 1.2rem;
+    }
+
+    /* Chat Area */
+    .chat-container {
+      height: calc(100vh - 68px);
+      display: flex;
+      flex-direction: column;
+      background: var(--light-bg);
+    }
+
+    .chat-header {
+      padding: 1rem;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      background: var(--light-bg);
+      z-index: 10;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      color: var(--text);
+      margin-right: 1rem;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .chat-header-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--peach);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--clay);
+      font-weight: 700;
+      margin-right: 1rem;
+    }
+
+    .chat-header-info h3 {
+      font-size: 1.1rem;
+      color: var(--clay);
+    }
+
+    .chat-header-info small {
+      color: #888;
+      font-size: 0.8rem;
+    }
+
+    .chat-header-actions {
+      margin-left: auto;
+      display: flex;
+      gap: 1rem;
+    }
+
+    .chat-header-actions button {
+      background: none;
+      border: none;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .messages-container {
+      flex-grow: 1;
+      padding: 1rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .message {
+      max-width: 70%;
+      margin-bottom: 1rem;
+      padding: 0.8rem 1rem;
+      border-radius: 18px;
+      position: relative;
+    }
+
+    .message.sent {
+      align-self: flex-end;
+      background: var(--coral);
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+
+    .message.received {
+      align-self: flex-start;
+      background: rgba(139, 168, 136, 0.2);
+      border-bottom-left-radius: 4px;
+    }
+
+    .message-time {
+      font-size: 0.7rem;
+      margin-top: 0.3rem;
+      text-align: right;
+      opacity: 0.8;
+    }
+
+    .message.received .message-time {
+      color: var(--text);
+    }
+
+    .message.sent .message-time {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    /* Message Input */
+    .message-input-container {
+      padding: 1rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      position: sticky;
+      bottom: 0;
+      background: var(--light-bg);
+    }
+
+    .message-input {
+      flex-grow: 1;
+      padding: 0.8rem 1.2rem;
+      border: 1px solid var(--peach);
+      border-radius: 24px;
+      font-family: 'Nunito', sans-serif;
+      resize: none;
+      max-height: 120px;
+    }
+
+    .send-btn {
+      background: var(--coral);
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-left: 0.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .attach-btn {
+      background: none;
+      border: none;
+      color: var(--text);
+      margin-right: 0.5rem;
+      cursor: pointer;
+    }
+
+    /* Mobile Bottom Navigation */
+    .mobile-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--light-bg);
+      padding: 0.8rem;
+      display: flex;
+      justify-content: space-around;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+      z-index: 100;
+    }
+
+    .mobile-nav a {
+      color: var(--text);
+      font-size: 1.2rem;
+      padding: 0.5rem;
+    }
+
+    .mobile-nav a.active {
+      color: var(--coral);
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <a class="back-btn" href="{%url 'chats'%}">
+      <i class="fas fa-arrow-left"></i>
+    </a>
+    <div class="logo">HearMe</div>
+    <div class="nav-icons">
+      <a href="#"><i class="fas fa-user"></i></a>
+    </div>
+  </header>
+
+  <!-- Chat Area -->
+  <div class="chat-container">
+    <div class="chat-header">
+      <div class="chat-header-avatar">{{ u.first_name|slice:":1" }}{{ u.last_name|slice:":1" }}</div>
+      <div class="chat-header-info">
+        <h3>{{u.username}}</h3>
+        <small>Account status: Active</small>
+      </div>
+      <div class="chat-header-actions">
+        <button title="Video call"><i class="fas fa-video"></i></button>
+        <button title="More options"><i class="fas fa-ellipsis-v"></i></button>
+      </div>
+    </div>
+
+    <div class="messages-container">
+      {% if mess %}
+      {% for m in mess %}
+      {% if m.sender == u %}
+      <!-- Received message -->
+      <div class="message received">
+        {{m.content}}
+        <div class="message-time">{{m.timestamp}}</div>
+      </div>
+      {% else %}
+      <!-- Sent message -->
+      <div class="message sent">
+        {{m.content}}
+        <div class="message-time">{{m.timestamp}}</div>
+      </div>
+      {% endif %}
+      {% endfor %}
+      {% else %}
+      <!-- Received message -->
+      <div class="message received">
+        Wanna start a conversation?
+        <div class="message-time">HearMe</div>
+      </div>
+      {% endif %}
+    </div>
+
+    <form class="message-input-container" method="POST">{% csrf_token %}
+      <textarea class="message-input" name="message" placeholder="Type a message..." rows="1"></textarea>
+      <button class="send-btn" title="Send message">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </form>
+  </div>
+
+</body>
+</html>

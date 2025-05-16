@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+{% csrf_token %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HearMe | Community Feed</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --coral: #FF7E6B;
+      --peach: #FFB8A2;
+      --cream: #FFF4E9;
+      --sage: #8BA888;
+      --clay: #D17B60;
+      --text: #5A3E36;
+      --light-bg: rgba(255, 255, 255, 0.9);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* Header */
+    .header {
+      background: var(--light-bg);
+      padding: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--clay);
+    }
+
+    .nav-icons {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-icons a {
+      color: var(--text);
+      font-size: 1.2rem;
+    }
+
+    /* Main Layout */
+    .container {
+      display: flex;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem;
+      gap: 1.5rem;
+    }
+
+    /* Left Sidebar - Categories */
+    .sidebar {
+      flex: 1;
+      position: sticky;
+      top: 80px;
+      height: fit-content;
+      display: none; /* Hidden on mobile */
+    }
+
+    @media (min-width: 768px) {
+      .sidebar {
+        display: block;
+      }
+    }
+
+    .category {
+      background: var(--light-bg);
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+    }
+
+    .category h3 {
+      margin-bottom: 1rem;
+      color: var(--clay);
+    }
+
+    .category-list {
+      list-style: none;
+    }
+
+    .category-list li {
+      margin-bottom: 0.8rem;
+    }
+
+    .category-list a {
+      color: var(--text);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .category-list a:hover {
+      background: var(--peach);
+      color: var(--clay);
+    }
+
+    /* Main Feed */
+    .feed {
+      flex: 2;
+    }
+
+    /* Post Create Box */
+    .post-create {
+      background: var(--light-bg);
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .post-create textarea {
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid var(--peach);
+      border-radius: 12px;
+      font-family: 'Nunito', sans-serif;
+      resize: none;
+      margin-bottom: 1rem;
+      min-height: 100px;
+    }
+
+    .post-create textarea::placeholder {
+      color: #aaa;
+    }
+
+    .post-create-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .post-btn {
+      background: var(--coral);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .post-btn:hover {
+      background: #FF6B54;
+      transform: translateY(-2px);
+    }
+
+    /* Posts */
+    .post {
+      background: var(--light-bg);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .post-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .post-user {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--peach);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--clay);
+      font-weight: 700;
+      margin-right: 1rem;
+    }
+
+    .post-user-info h4 {
+      font-size: 1rem;
+      color: var(--clay);
+    }
+
+    .post-user-info small {
+      color: #888;
+      font-size: 0.8rem;
+    }
+
+    .post-content {
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .post-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .post-tag {
+      background: rgba(139, 168, 136, 0.2);
+      color: var(--sage);
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+    }
+
+    .post-actions {
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid #eee;
+      padding-top: 1rem;
+    }
+
+    .post-action {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text);
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .post-action:hover {
+      background: rgba(255, 184, 162, 0.2);
+    }
+
+    /* Comments */
+    .comments {
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid #eee;
+    }
+
+    .comment {
+      display: flex;
+      margin-bottom: 1rem;
+    }
+
+    .comment-user {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(139, 168, 136, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--sage);
+      font-weight: 700;
+      font-size: 0.8rem;
+      margin-right: 1rem;
+      flex-shrink: 0;
+    }
+
+    .comment-content {
+      background: rgba(255, 255, 255, 0.7);
+      padding: 0.8rem;
+      border-radius: 8px;
+      flex-grow: 1;
+    }
+
+    .comment-user-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.3rem;
+    }
+
+    .comment-user-info h5 {
+      font-size: 0.9rem;
+      color: var(--clay);
+      margin-right: 0.5rem;
+    }
+
+    .comment-user-info small {
+      color: #888;
+      font-size: 0.7rem;
+    }
+
+    .comment-text {
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .comment-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+    }
+
+    .comment-action {
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .comment-action:hover {
+      color: var(--coral);
+    }
+
+    .add-comment {
+      display: flex;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .add-comment input {
+      flex-grow: 1;
+      padding: 0.8rem;
+      border: 1px solid var(--peach);
+      border-radius: 20px;
+      font-family: 'Nunito', sans-serif;
+      margin-right: 0.5rem;
+    }
+    .post-create input {
+      flex-grow: 1;
+      padding: 0.8rem;
+      border: 1px solid var(--peach);
+      border-radius: 20px;
+      font-family: 'Nunito', sans-serif;
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .add-comment button {
+      background: var(--sage);
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .add-comment button:hover {
+      background: #7a9a77;
+    }
+
+    /* Right Sidebar - Suggestions */
+    .right-sidebar {
+      flex: 1;
+      position: sticky;
+      top: 80px;
+      height: fit-content;
+      display: none; /* Hidden on mobile */
+    }
+
+    @media (min-width: 992px) {
+      .right-sidebar {
+        display: block;
+      }
+    }
+
+    .suggestions {
+      background: var(--light-bg);
+      padding: 1.5rem;
+      border-radius: 12px;
+    }
+
+    .suggestions h3 {
+      margin-bottom: 1rem;
+      color: var(--clay);
+    }
+
+    .suggestion {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding: 0.5rem;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .suggestion:hover {
+      background: rgba(255, 184, 162, 0.2);
+    }
+
+    .suggestion-user {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 126, 107, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--coral);
+      font-weight: 700;
+      margin-right: 1rem;
+    }
+
+    .suggestion-info h4 {
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+
+    .suggestion-info small {
+      color: #888;
+      font-size: 0.8rem;
+    }
+
+    /* Mobile Bottom Navigation */
+    .mobile-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--light-bg);
+      padding: 0.8rem;
+      display: flex;
+      justify-content: space-around;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+      z-index: 100;
+    }
+
+    @media (min-width: 768px) {
+      .mobile-nav {
+        display: none;
+      }
+    }
+
+    .mobile-nav a {
+      color: var(--text);
+      font-size: 1.2rem;
+      padding: 0.5rem;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .post {
+      animation: fadeIn 0.5s ease-out;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">HearMe</div>
+    <form class="add-comment" action="{% url 'search_posts' %}" method="get">
+        <input type="text" name="q"placeholder="Search posts...">
+        <button><i class="fas fa-search"></i></button>
+    </form>
+    <div class="nav-icons">
+
+      <a href="{% url 'chats' %}"><i class="fas fa-envelope"></i></a>
+      <a href="{% url 'profile' %}"><i class="fas fa-user"></i></a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Left Sidebar - Categories (Hidden on Mobile) -->
+    <aside class="sidebar">
+      <div class="category">
+        <h3>Categories</h3>
+        <ul class="category-list">
+          {% for tag in tags %}
+          <li><a href="{% url 'posts-f' 'Tag' tag.name %}"><i class="{{tag.icon}}"></i> {{tag.name}}</a></li>
+          {% endfor %}
+          <li><a href="#"><i class="fas fa-plus-circle"></i> See More</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Feed -->
+    <main class="feed">
+      <!-- Post Create Box -->
+      <form class="post-create" method="POST">{% csrf_token %}
+        <textarea placeholder="What's on your mind? Share your thoughts..." name="content"></textarea>
+        <input type="text" placeholder="Add tags, separated by commas..." name="tags">
+        <div class="post-create-actions">
+          <div>
+            <button class="post-btn">Post</button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Posts -->
+      {% if simp %}
+      {% for post in simp %}
+      <div class="post">
+        <div class="post-header">
+          <div class="post-user">{{ post.author.first_name|slice:":1" }}{{ post.author.last_name|slice:":1" }}</div>
+          <div class="post-user-info">
+            <h4>{{post.author.first_name}} {{post.author.last_name}}</h4>
+            <small>{{post.created_at}}</small>
+          </div>
+        </div>
+        <div class="post-content">
+          <p>{{post.content}}</p>
+        </div>
+        <div class="post-tags">
+          {% for tag in post.tags.all %}
+          <span class="post-tag">{{tag.name}}</span>
+          {% endfor %}
+        </div>
+        <div class="post-actions">
+          <div class="post-action">
+            <i class="far fa-heart"></i>
+            <span>{{post.hugs.all.count}} Hugs</span>
+          </div>
+          <a href="{% url 'comments' post.id %}" style="color: inherit; text-decoration: none;"><div class="post-action">
+            <i class="far fa-comment"></i>
+            <span>{{post.comments.all.count}} Comments</span>
+          </div></a>
+          <div class="post-action">
+            <i class="fas fa-share"></i>
+            <span>Share</span>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      {% else %}
+      {% endif %}
+      <!-- Second Post -->
+      {% if posts %}
+      {% for post in posts %}
+      <div class="post">
+        <div class="post-header">
+          <div class="post-user">{{ post.author.first_name|slice:":1" }}{{ post.author.last_name|slice:":1" }}</div>
+          <div class="post-user-info">
+            <h4>{{post.author.username}}</h4>
+            <small>{{post.created_at}}</small>
+          </div>
+        </div>
+        <div class="post-content">
+          <p>{{post.content}}</p>
+        </div>
+        <div class="post-tags">
+          {% for tag in post.tags.all %}
+          <span class="post-tag">{{tag.name}}</span>
+          {% endfor %}
+        </div>
+        <div class="post-actions">
+          <div class="post-action hug-button" data-post-id="{{ post.id }}">
+          <i class="far fa-heart"></i>
+          <span>{{ post.hugs.all.count }} Hugs</span>
+        </div>
+          <a href="{% url 'comments' post.id %}" style="color: inherit; text-decoration: none;"><div class="post-action">
+            <i class="far fa-comment"></i>
+            <span>{{post.comments.all.count}} Comments</span>
+          </div></a>
+          <div class="post-action">
+            <i class="fas fa-share"></i>
+            <span>Share</span>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      {% else %}
+      {% endif %}
+    </main>
+
+    <!-- Right Sidebar - Suggestions (Hidden on Mobile/Tablet) -->
+    <aside class="right-sidebar">
+      <div class="suggestions">
+        <h3>People with similar struggles</h3>
+        {% if sim %}
+        {% for s in sim %}
+        <a href="{% url 'posts-f' 'User' s.username %}" style="color: inherit; text-decoration: none;"><div class="suggestion">
+          <div class="suggestion-user">{{ s.first_name|slice:":1" }}{{ s.last_name|slice:":1" }}</div>
+          <div class="suggestion-info">
+            <h4>{{s.username}}</h4>
+            <small>Last login: {{s.last_login}}</small>
+          </div>
+        </div></a>
+        {% endfor %}
+        {% endif %}
+      </div>
+    </aside>
+  </div>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="mobile-nav">
+    <a href="#"><i class="fas fa-home"></i></a>
+    <a href="#"><i class="fas fa-envelope"></i></a>
+    <a href="{% url 'profile'%}"><i class="fas fa-user"></i></a>
+  </nav>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Post submission
+      const postTextarea = document.querySelector('.post-create textarea');
+      const postBtn = document.querySelector('.post-create .post-btn');
+
+      postBtn.addEventListener('click', function() {
+        if (postTextarea.value.trim() === '') {
+          alert("Please write something before posting");
+          return;
+        }
+
+      // Comment submission
+      const commentInputs = document.querySelectorAll('.add-comment input');
+      const commentBtns = document.querySelectorAll('.add-comment button');
+
+      commentBtns.forEach((btn, index) => {
+        btn.addEventListener('click', function() {
+          const commentText = commentInputs[index].value;
+          if (commentText.trim() === '') return;
+
+          // Simulate comment addition
+          this.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+          setTimeout(() => {
+            this.innerHTML = '<i class="fas fa-paper-plane"></i>';
+            commentInputs[index].value = '';
+            alert("Comment added! (In a real app, this would appear below)");
+          }, 800);
+        });
+      });
+
+      document.querySelectorAll('.post-action.hug-action').forEach(button => {
+        button.addEventListener('click', async () => {
+          const postId = button.getAttribute('data-post-id');
+          const csrfToken = document.getElementById('csrfToken').value;
+
+          const response = await fetch("/hug-post/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": csrfToken
+            },
+            body: JSON.stringify({ post_id: postId })
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            button.querySelector('span').textContent = `${result.hug_count} Hugs`;
+            const icon = button.querySelector('i');
+            icon.classList.toggle("fas", result.hugged);
+            icon.classList.toggle("far", !result.hugged);
+          } else {
+            console.error(result.error);
+            alert("Something went wrong: " + result.error);
+          }
+        });
+      });
+    });
+    });
+  </script>
+</body>
+</html>

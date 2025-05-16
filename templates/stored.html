@@ -1,0 +1,215 @@
+<div class="post-create">
+  <textarea placeholder="What's on your mind? Share your thoughts..."></textarea>
+
+  <!-- Tag Selection Section -->
+  <div class="tag-selection">
+    <div class="tag-input-container">
+      <input type="text" class="tag-input" placeholder="Add tags..." id="tagInput">
+      <button class="add-tag-btn"><i class="fas fa-plus"></i></button>
+    </div>
+    <div class="tag-suggestions" id="tagSuggestions"></div>
+    <div class="selected-tags" id="selectedTags"></div>
+  </div>
+
+  <div class="post-create-actions">
+    <div>
+      <button class="post-btn">Post</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Add these styles to your existing CSS */
+  .tag-selection {
+    margin-top: 1rem;
+  }
+
+  .tag-input-container {
+    display: flex;
+    margin-bottom: 0.5rem;
+  }
+
+  .tag-input {
+    flex-grow: 1;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--peach);
+    border-radius: 20px;
+    font-family: 'Nunito', sans-serif;
+  }
+
+  .add-tag-btn {
+    background: var(--sage);
+    color: white;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    margin-left: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .tag-suggestions {
+    display: none;
+    background: white;
+    border: 1px solid var(--peach);
+    border-radius: 8px;
+    max-height: 150px;
+    overflow-y: auto;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .tag-suggestions.visible {
+    display: block;
+  }
+
+  .suggested-tag {
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    background: rgba(139, 168, 136, 0.1);
+    color: var(--sage);
+    display: inline-block;
+    margin: 0.2rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+
+  .suggested-tag:hover {
+    background: rgba(139, 168, 136, 0.3);
+  }
+
+  .selected-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .selected-tag {
+    background: var(--sage);
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .remove-tag {
+    margin-left: 0.5rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Sample available tags
+    const availableTags = [
+      "Anxiety", "Depression", "Stress", "Loneliness",
+      "Relationships", "Self-Care", "Anger", "Grief",
+      "Trauma", "Self-Esteem", "Addiction", "Sleep",
+      "Mindfulness", "Therapy", "Recovery"
+    ];
+
+    const tagInput = document.getElementById('tagInput');
+    const tagSuggestions = document.getElementById('tagSuggestions');
+    const selectedTagsContainer = document.getElementById('selectedTags');
+    const addTagBtn = document.querySelector('.add-tag-btn');
+    let selectedTags = [];
+
+    // Show tag suggestions when typing
+    tagInput.addEventListener('input', function() {
+      const inputValue = this.value.toLowerCase();
+
+      if (inputValue.length === 0) {
+        tagSuggestions.classList.remove('visible');
+        return;
+      }
+
+      const filteredTags = availableTags.filter(tag =>
+        tag.toLowerCase().includes(inputValue) &&
+        !selectedTags.includes(tag)
+      );
+
+      if (filteredTags.length > 0) {
+        tagSuggestions.innerHTML = filteredTags.map(tag =>
+          `<span class="suggested-tag" data-tag="${tag}">${tag}</span>`
+        ).join('');
+        tagSuggestions.classList.add('visible');
+      } else {
+        tagSuggestions.classList.remove('visible');
+      }
+    });
+
+    // Add tag when clicking suggestion
+    tagSuggestions.addEventListener('click', function(e) {
+      if (e.target.classList.contains('suggested-tag')) {
+        const tag = e.target.getAttribute('data-tag');
+        addTag(tag);
+      }
+    });
+
+    // Add tag when pressing Enter or clicking add button
+    tagInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const tag = this.value.trim();
+        if (tag && availableTags.includes(tag) && !selectedTags.includes(tag)) {
+          addTag(tag);
+        }
+      }
+    });
+
+    addTagBtn.addEventListener('click', function() {
+      const tag = tagInput.value.trim();
+      if (tag && availableTags.includes(tag) {
+        addTag(tag);
+      }
+    });
+
+    // Function to add a tag
+    function addTag(tag) {
+      if (!selectedTags.includes(tag)) {
+        selectedTags.push(tag);
+        renderSelectedTags();
+        tagInput.value = '';
+        tagSuggestions.classList.remove('visible');
+      }
+    }
+
+    // Function to remove a tag
+    function removeTag(tag) {
+      selectedTags = selectedTags.filter(t => t !== tag);
+      renderSelectedTags();
+    }
+
+    // Render selected tags
+    function renderSelectedTags() {
+      selectedTagsContainer.innerHTML = selectedTags.map(tag => `
+        <div class="selected-tag">
+          ${tag}
+          <span class="remove-tag" data-tag="${tag}">&times;</span>
+        </div>
+      `).join('');
+
+      // Add event listeners to remove buttons
+      document.querySelectorAll('.remove-tag').forEach(btn => {
+        btn.addEventListener('click', function() {
+          removeTag(this.getAttribute('data-tag'));
+        });
+      });
+    }
+
+    // Close suggestions when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.tag-input-container') &&
+          !e.target.closest('.tag-suggestions')) {
+        tagSuggestions.classList.remove('visible');
+      }
+    });
+  });
+</script>

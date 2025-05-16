@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HearMe | My Profile</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --coral: #FF7E6B;
+      --peach: #FFB8A2;
+      --cream: #FFF4E9;
+      --sage: #8BA888;
+      --clay: #D17B60;
+      --text: #5A3E36;
+      --light-bg: rgba(255, 255, 255, 0.9);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* Header */
+    .header {
+      background: var(--light-bg);
+      padding: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--clay);
+    }
+
+    .nav-icons {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-icons a {
+      color: var(--text);
+      font-size: 1.2rem;
+    }
+
+    /* Main Container */
+    .profile-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    /* Profile Header */
+    .profile-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: var(--peach);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--clay);
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .avatar-edit {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background: var(--coral);
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .profile-name {
+      font-size: 1.5rem;
+      color: var(--clay);
+      margin-bottom: 0.5rem;
+    }
+
+    .profile-username {
+      color: #888;
+      margin-bottom: 1rem;
+    }
+
+    .profile-bio {
+      max-width: 500px;
+      margin-bottom: 1.5rem;
+    }
+
+    .profile-stats {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--clay);
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: #888;
+    }
+
+    .profile-actions {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .btn {
+      padding: 0.7rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .btn-primary {
+      background: var(--coral);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #FF6B54;
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--coral);
+      color: var(--coral);
+    }
+
+    .btn-outline:hover {
+      background: rgba(255, 126, 107, 0.1);
+    }
+
+    /* Profile Sections */
+    .profile-section {
+      background: var(--light-bg);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      color: var(--clay);
+    }
+
+    .edit-section {
+      color: var(--coral);
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    /* About Section */
+    .about-item {
+      margin-bottom: 1rem;
+    }
+
+    .about-label {
+      font-weight: 600;
+      color: var(--clay);
+      margin-bottom: 0.3rem;
+    }
+
+    /* Interests Section */
+    .interests-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .interest-tag {
+      background: rgba(139, 168, 136, 0.2);
+      color: var(--sage);
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+    }
+
+    /* Posts Section */
+    .profile-posts {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .profile-post {
+      padding: 1rem;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .post-content {
+      margin-bottom: 0.5rem;
+    }
+
+    .post-meta {
+      display: flex;
+      justify-content: space-between;
+      color: #888;
+      font-size: 0.9rem;
+    }
+
+    /* Edit Profile Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      background: white;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: translateY(20px);
+      transition: transform 0.3s;
+    }
+
+    .modal-overlay.active .modal {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 1.3rem;
+      color: var(--clay);
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #888;
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--clay);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: 1px solid var(--peach);
+      border-radius: 8px;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--coral);
+    }
+
+    textarea.form-control {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .modal-footer {
+      padding: 1.5rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+    }
+
+    /* Mobile Bottom Navigation */
+    .mobile-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--light-bg);
+      padding: 0.8rem;
+      display: flex;
+      justify-content: space-around;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+      z-index: 100;
+    }
+
+    @media (min-width: 768px) {
+      .mobile-nav {
+        display: none;
+      }
+    }
+
+    .mobile-nav a {
+      color: var(--text);
+      font-size: 1.2rem;
+      padding: 0.5rem;
+    }
+
+    .mobile-nav a.active {
+      color: var(--coral);
+    }
+
+    /* Responsive Adjustments */
+    @media (min-width: 768px) {
+      .profile-header {
+        flex-direction: row;
+        align-items: flex-start;
+        text-align: left;
+      }
+
+      .profile-avatar {
+        margin-right: 2rem;
+        margin-bottom: 0;
+      }
+
+      .profile-info {
+        flex-grow: 1;
+      }
+
+      .profile-actions {
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">HearMe</div>
+    <div class="nav-icons">
+      <a href="{% url 'chats' %}"><i class="fas fa-envelope"></i></a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="profile-container">
+    <!-- Profile Header -->
+    <div class="profile-header">
+      <div class="profile-avatar">
+        <span>{{ request.user.first_name|slice:":1" }}{{ request.user.last_name|slice:":1" }}</span>
+      </div>
+      <div class="profile-info">
+        <h1 class="profile-name">{{request.user.first_name}} {{request.user.last_name}}</h1>
+        <div class="profile-username">@{{request.user.username}}</div>
+        <div class="profile-bio">
+          {{request.user.profile.bio}}
+        </div>
+        <div class="profile-stats">
+          <div class="stat-item">
+            <div class="stat-number">{{request.user.profile.post_count}}</div>
+            <div class="stat-label">Posts</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">{{request.user.profile.hugs_count}}</div>
+            <div class="stat-label">Hugs</div>
+          </div>
+        </div>
+        <div class="profile-actions">
+          <button class="btn btn-outline" id="editProfileBtn">Edit Profile</button>
+          <button class="btn btn-primary">Share Profile</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- About Section -->
+    <div class="profile-section">
+      <div class="section-header">
+        <h2 class="section-title">About</h2>
+        <div class="edit-section" data-section="about">Edit</div>
+      </div>
+      <div class="about-content">
+        <div class="about-item">
+          <div class="about-label">Location</div>
+          <div class="about-value">{{request.user.profile.location}}</div>
+        </div>
+        <div class="about-item">
+          <div class="about-label">Joined</div>
+          <div class="about-value">{{request.user.date_joined}}</div>
+        </div>
+        <div class="about-item">
+          <div class="about-label">Personal Story</div>
+          <div class="about-value">
+            {{request.user.profile.personal_story}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interests Section -->
+    <div class="profile-section">
+      <div class="section-header">
+        <h2 class="section-title">My Interests</h2>
+        <div class="edit-section" data-section="interests">Edit</div>
+      </div>
+      <div class="interests-list">
+        {% for tag in request.user.profile.interests.all%}
+        <span class="interest-tag">{{tag.name}}</span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Recent Activity Section -->
+    <div class="profile-section">
+      <div class="section-header">
+        <h2 class="section-title">Recent Activity</h2>
+      </div>
+      <div class="profile-posts">
+        {% for post in request.user.posts.all %}
+        <div class="profile-post">
+          <div class="post-content">
+            {{post.content}}
+          </div>
+          <div class="post-meta">
+            <span>{{post.created_at}}
+            <div style="display:flex; padding:20px;">
+              <span>{{post.hugs.count}} Hugs</span>
+              <span style="margin-left:20px">{{post.comments.count}} Comments</span>
+              <a href="{% url 'comments' post.id%}"><span style="margin-left:20px"><i class="fas fa-eye"></i></span></a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Profile Modal -->
+  <div class="modal-overlay" id="editProfileModal">
+    <form class="modal" method="POST">{% csrf_token %}
+      <div class="modal-header">
+        <h3 class="modal-title">Edit Profile</h3>
+        <button class="close-modal" id="closeModalBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Initials</label>
+          <div class="profile-avatar" style="width: 80px; height: 80px; margin-bottom: 1rem;">
+            <span>{{ request.user.first_name|slice:":1" }}{{ request.user.last_name|slice:":1" }}</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="fullName" class="form-label">First Name</label>
+          <input type="text" id="firstName" class="form-control" name="first" value="{{ request.user.first_name }}">
+        </div>
+        <div class="form-group">
+          <label for="fullName" class="form-label">Last Name</label>
+          <input type="text" id="fullName" class="form-control" name="last"  value="{{ request.user.last_name }}">
+        </div>
+        <div class="form-group">
+          <label for="username" class="form-label">Username</label>
+          <input type="text" id="username" class="form-control" name="username" value="{{ request.user.username }}">
+        </div>
+
+        <div class="form-group">
+          <label for="bio" class="form-label">Bio</label>
+          <textarea id="bio" class="form-control" name="bio">{{ request.user.profile.bio }}</textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="location" class="form-label">Location</label>
+          <input type="text" id="location" class="form-control" name="location" value="{{ request.user.profile.location }}">
+        </div>
+
+        <div class="form-group">
+          <label for="personalStory" class="form-label">Personal Story</label>
+          <textarea id="personalStory" class="form-control">{{ request.user.profile.personal_story }}</textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Interests</label>
+          <div class="interests-list" style="margin-bottom: 1rem;">
+            {% for tag in request.user.profile.interests.all %}
+            <span class="interest-tag">{{tag.name}}<a href="#"><i class="fas fa-times remove-tag"></i></a></span>
+            {% endfor %}
+          </div>
+          <div class="tag-input-container">
+            <input type="text" class="form-control tag-input" name='tags' placeholder="Add interests...">
+            <button class="add-tag-btn"><i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="cancelEditBtn">Cancel</button>
+        <button class="btn btn-primary" id="saveProfileBtn">Save Changes</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="mobile-nav">
+    <a href="{% url 'home'%}"><i class="fas fa-home"></i></a>
+    <a href="{% url 'chats'  %}"><i class="fas fa-envelope"></i></a>
+    <a href="#" class="active"><i class="fas fa-user"></i></a>
+  </nav>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Modal elements
+      const editProfileBtn = document.getElementById('editProfileBtn');
+      const editProfileModal = document.getElementById('editProfileModal');
+      const closeModalBtn = document.getElementById('closeModalBtn');
+      const cancelEditBtn = document.getElementById('cancelEditBtn');
+      const saveProfileBtn = document.getElementById('saveProfileBtn');
+      const avatarEditBtn = document.getElementById('avatarEditBtn');
+      const avatarUpload = document.getElementById('avatarUpload');
+
+      // Show modal when edit button is clicked
+      editProfileBtn.addEventListener('click', function() {
+        editProfileModal.classList.add('active');
+      });
+
+      // Close modal
+      function closeModal() {
+        editProfileModal.classList.remove('active');
+      }
+
+      closeModalBtn.addEventListener('click', closeModal);
+      cancelEditBtn.addEventListener('click', closeModal);
+
+      // Close modal when clicking outside
+      editProfileModal.addEventListener('click', function(e) {
+        if (e.target === this) {
+          closeModal();
+        }
+      });
+
+      // Save profile changes
+      saveProfileBtn.addEventListener('click', function() {
+        // In a real app, you would save to the server here
+        const fullName = document.getElementById('fullName').value;
+        const bio = document.getElementById('bio').value;
+
+        // Update the profile view
+        document.querySelector('.profile-name').textContent = fullName;
+        document.querySelector('.profile-bio').textContent = bio;
+
+        // Show success message
+        alert('Profile updated successfully!');
+        closeModal();
+      });
+
+      // Avatar upload
+      avatarEditBtn.addEventListener('click', function() {
+        avatarUpload.click();
+      });
+
+      avatarUpload.addEventListener('change', function(e) {
+        if (e.target.files.length > 0) {
+          const file = e.target.files[0];
+          const reader = new FileReader();
+
+          reader.onload = function(event) {
+            const avatar = document.querySelector('.profile-avatar');
+            avatar.innerHTML = `
+              <div class="avatar-edit" id="avatarEditBtn">
+                <i class="fas fa-camera"></i>
+              </div>
+              <img src="${event.target.result}" alt="Profile photo">
+            `;
+
+            // Reattach event listener to the new button
+            document.querySelector('.profile-avatar .avatar-edit').addEventListener('click', function() {
+              avatarUpload.click();
+            });
+          };
+
+          reader.readAsDataURL(file);
+        }
+      });
+
+      // Section edit buttons
+      document.querySelectorAll('.edit-section').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const section = this.getAttribute('data-section');
+          editProfileModal.classList.add('active');
+
+          // In a real app, you might scroll to the relevant section in the modal
+          console.log('Editing section:', section);
+        });
+      });
+
+      // Tag functionality in modal
+      const tagInput = document.querySelector('.modal .tag-input');
+      const addTagBtn = document.querySelector('.modal .add-tag-btn');
+      const interestsList = document.querySelector('.modal .interests-list');
+
+      addTagBtn.addEventListener('click', function() {
+        addTag();
+      });
+
+      tagInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          addTag();
+        }
+      });
+
+      function addTag() {
+        const tagText = tagInput.value.trim();
+        if (tagText) {
+          const tagElement = document.createElement('span');
+          tagElement.className = 'interest-tag';
+          tagElement.innerHTML = `${tagText}<i class="fas fa-times remove-tag"></i>`;
+
+          interestsList.appendChild(tagElement);
+          tagInput.value = '';
+
+          // Add remove functionality
+          tagElement.querySelector('.remove-tag').addEventListener('click', function() {
+            tagElement.remove();
+          });
+        }
+      }
+
+      // Initialize remove buttons for existing tags
+      document.querySelectorAll('.modal .remove-tag').forEach(btn => {
+        btn.addEventListener('click', function() {
+          this.parentElement.remove();
+        });
+      });
+    });
+  document.getElementById('saveProfileBtn').addEventListener('click', async function () {
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    const data = {
+      first_name: document.getElementById('firstName').value,
+      last_name: document.getElementById('fullName').value,
+      username: document.getElementById('username').value,
+      bio: document.getElementById('bio').value,
+      location: document.getElementById('location').value,
+      personal_story: document.getElementById('personalStory').value,
+      interests: document.querySelector('.tag-input').value, // comma-separated
+    };
+
+    const response = await fetch("{% url 'update_profile' %}", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrfToken,
+      },
+      body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+    if (result.success) {
+      alert("Profile updated!");
+      location.reload(); // or update UI accordingly
+    } else {
+      alert("Something went wrong: " + result.error);
+    }
+  });
+</script>
+</body>
+</html>
